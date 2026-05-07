@@ -8,7 +8,7 @@ export default function useConexionConServidor() {
     useState("Desconectado");
 
   useEffect(() => {
-    const novoSocket = io("http://TU_IP_LOCAL_deARI:3000", {
+    const novoSocket = io("http://10.56.5.106:3000", {
       transports: ["websocket"],
     });
 
