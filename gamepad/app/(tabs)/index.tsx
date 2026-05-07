@@ -1,61 +1,36 @@
-import { View, Text, StyleSheet } from "react-native";
+import Contenedor from "../../src/componentes/contenedor";
+import IndicadorDeConexion from "../../src/componentes/indicadorDeConexion";
+import ControlesDeMovimiento from "../../src/componentes/controladoresDeMovimiento";
+import BotonDeSalto from "../../src/componentes/botonDeSalto";
 
-export default function gamePad() {
+import useConexionConServidor from "../../src/hooks/useConexionConServidor";
+
+export default function App() {
+  const {
+    estadoDeConexion,
+    moverIzquierda,
+    detenerIzquierda,
+    moverDerecha,
+    detenerDerecha,
+    saltar,
+    dejarDeSaltar,
+  } = useConexionConServidor();
+
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Pico Park GamePad</Text>
+    <Contenedor>
+      <IndicadorDeConexion estado={estadoDeConexion} />
 
-      <View style={styles.controls}>
-        <Text style={styles.button}>←</Text>
+      <ControlesDeMovimiento
+        alPresionarIzquierda={moverIzquierda}
+        alSoltarIzquierda={detenerIzquierda}
+        alPresionarDerecha={moverDerecha}
+        alSoltarDerecha={detenerDerecha}
+      />
 
-        <Text style={styles.button}>→</Text>
-      </View>
-
-      <Text style={styles.jump}>A</Text>
-    </View>
+      <BotonDeSalto
+        alPresionar={saltar}
+        alSoltar={dejarDeSaltar}
+      />
+    </Contenedor>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#111",
-    justifyContent: "space-around",
-    alignItems: "center",
-    padding: 30,
-  },
-
-  title: {
-    color: "white",
-    fontSize: 30,
-    fontWeight: "bold",
-  },
-
-  controls: {
-    flexDirection: "row",
-    gap: 30,
-  },
-
-  button: {
-    backgroundColor: "#333",
-    color: "white",
-    fontSize: 40,
-    width: 80,
-    height: 80,
-    textAlign: "center",
-    textAlignVertical: "center",
-    borderRadius: 20,
-  },
-
-  jump: {
-    backgroundColor: "#f59e0b",
-    color: "white",
-    fontSize: 40,
-    width: 100,
-    height: 100,
-    textAlign: "center",
-    textAlignVertical: "center",
-    borderRadius: 20,
-  },
-});
-
