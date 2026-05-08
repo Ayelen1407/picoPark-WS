@@ -17,10 +17,9 @@ const GamePad: React.FC<Props> = ({ estado, desconectar, enviarComando }) => {
       <View style={styles.header}>
         <View style={styles.headerLeft}>
           <IndicadorDeConexion conectado={estado.conectado} />
-          <Text style={styles.idText}>ID: {estado.clienteId?.slice(0, 8)}...</Text>
         </View>
         <TouchableOpacity style={styles.disconnectButton} onPress={desconectar}>
-          <Text style={styles.disconnectText}>❌</Text>
+          <Text style={styles.disconnectText}>X</Text>
         </TouchableOpacity>
       </View>
 
@@ -54,23 +53,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: 15,
   },
-  idText: {
-    color: 'white',
-    fontSize: 14,
-    fontFamily: 'monospace',
-    opacity: 0.9,
-  },
+
   disconnectButton: {
     width: 50,
     height: 50,
     borderRadius: 25,
-    backgroundColor: 'rgba(239,68,68,0.8)',
+    backgroundColor: '#334ec5',
     justifyContent: 'center',
     alignItems: 'center',
-    shadowColor: '#ef4444',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.4,
-    shadowRadius: 8,
     elevation: 8,
   },
   disconnectText: {
@@ -80,8 +70,8 @@ const styles = StyleSheet.create({
   gameArea: {
     flex: 1,
     flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'flex-end',
+    justifyContent: 'center',
+    alignItems: 'center',
     padding: 40,
   },
   footer: {
@@ -89,7 +79,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   footerText: {
-    color: 'rgba(255,255,255,0.7)',
+    color: 'rgba(192, 192, 192, 0.7)',
     fontSize: 14,
     fontFamily: 'monospace',
   },

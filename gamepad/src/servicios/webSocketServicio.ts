@@ -7,8 +7,8 @@ class WebSocketService {
 
   conectar(ip: string): Promise<string> {
     return new Promise((resolve, reject) => {
-      this.ws = new WebSocket(`ws://${ip}`);
-      
+      this.ws = new WebSocket(`ws://${ip}/ws`);
+  
       this.ws.onopen = () => {
         console.log('Conectado al servidor:', ip);
         resolve(this.clienteId);
@@ -29,7 +29,7 @@ class WebSocketService {
       };
 
       this.ws.onclose = () => {
-        console.log('❌ Desconectado del servidor');
+        console.log('Desconectado del servidor');
       };
     });
   }

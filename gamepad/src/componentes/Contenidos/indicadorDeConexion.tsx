@@ -29,7 +29,7 @@ const IndicadorDeConexion: React.FC<Props> = ({ conectado = false }) => {
       conectado ? styles.ledConectado : styles.ledDesconectado,
       { transform: [{ scale: pulseAnim }] }
     ]}>
-      <Text style={styles.ledText}>{conectado ? '🟢' : '🔴'}</Text>
+      <Text style={styles.ledText}>{conectado ? '' : '🔴'}</Text>
     </Animated.View>
   );
 };
