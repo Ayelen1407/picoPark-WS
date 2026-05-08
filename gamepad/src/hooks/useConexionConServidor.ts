@@ -1,70 +1,71 @@
-import { useEffect, useState } from "react";
-import { io, Socket } from "socket.io-client";
+import { useState, useEffect, useCallback } from 'react';
+import WebSocketService from '../servicios/webSocketServicio';
+import { EstadoConexion } from '../tipos/gamepad';
 
-export default function useConexionConServidor() {
-  const [socket, setSocket] = useState<Socket | null>(null);
+export const useConexionConServidor = () => {
+  const [estado, setEstado] = useState<EstadoConexion>({
+    conectado: false,
+    ip: '',
+    clienteId: ''
+  });
+  const [error, setError] = useState('');
+  const [conectando, setConectando] = useState(false);
 
-  const [estadoDeConexion, setEstadoDeConexion] =
-    useState("Desconectado");
-
-  useEffect(() => {
-    const novoSocket = io("http://10.56.5.106:3000", {
-      transports: ["websocket"],
-    });
-
-    novoSocket.on("connect", () => {
-      console.log("Conectado al servidor");
-
-      setEstadoDeConexion("Conectado");
-    });
-
-    novoSocket.on("disconnect", () => {
-      console.log("Desconectado del servidor");
-
-      setEstadoDeConexion("Desconectado");
-    });
-
-    setSocket(novoSocket);
-
-    return () => {
-      novoSocket.disconnect();
-    };
+  const conectar = useCallback(async (ip: string) => {
+    try {
+      setError('');
+      setConectando(true);
+      const clienteId = await WebSocketService.conectar(ip);
+      setEstado({ conectado: true, ip, clienteId });
+    } catch (err) {
+      setError('No se pudo conectar al servidor. Verifica la IP y puerto.');
+      console.error('Conexión fallida:', err);
+    } finally {
+      setConectando(false);
+    }
   }, []);
 
-  function moverIzquierda() {
-    console.log("IZQUIERDA PRESIONADA");
-  }
+  const desconectar = useCallback(() => {
+    WebSocketService.desconectar();
+    setEstado({ conectado: false, ip: '', clienteId: '' });
+  }, []);
 
-  function detenerIzquierda() {
-    console.log("IZQUIERDA SOLTADA");
-  }
+  const enviarComando = useCallback((comando: any) => {
+    WebSocketService.enviar({
+      ...comando,
+      clienteId: estado.clienteId!
+    });
+  }, [estado.clienteId]);
 
-  function moverDerecha() {
-    console.log("DERECHA PRESIONADA");
-  }
+  useEffect(() => {
+    let wakeLock: WakeLockSentinel | null = null;
+    
+    const requestWakeLock = async () => {
+      if ('wakeLock' in navigator) {
+        try {
+          wakeLock = await (navigator as any).wakeLock.request('screen');
+          console.log('Wake Lock activado');
+        } catch (err) {
+          console.log('Wake Lock no disponible:', err);
+        }
+      }
+    };
 
-  function detenerDerecha() {
-    console.log("DERECHA SOLTADA");
-  }
+    if (estado.conectado) {
+      requestWakeLock();
+    }
 
-  function saltar() {
-    console.log("SALTO PRESIONADO");
-  }
-
-  function dejarDeSaltar() {
-    console.log("SALTO SOLTADO");
-  }
+    return () => {
+      wakeLock?.release();
+    };
+  }, [estado.conectado]);
 
   return {
-    estadoDeConexion,
-
-    moverIzquierda,
-    detenerIzquierda,
-
-    moverDerecha,
-    detenerDerecha,
-
-    saltar,
-    dejarDeSaltar,
+    estado,
+    conectar,
+    desconectar,
+    enviarComando,
+    error,
+    conectando
   };
-}
+};

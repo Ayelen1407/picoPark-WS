@@ -1,36 +1,31 @@
-import Contenedor from "../../src/componentes/contenedor";
-import IndicadorDeConexion from "../../src/componentes/indicadorDeConexion";
-import ControlesDeMovimiento from "../../src/componentes/controladoresDeMovimiento";
-import BotonDeSalto from "../../src/componentes/botonDeSalto";
-
-import useConexionConServidor from "../../src/hooks/useConexionConServidor";
+import React from 'react';
+import { View, StyleSheet } from 'react-native';
+import { useConexionConServidor } from '../../src/hooks/useConexionConServidor';
+import PantallaDeConexion from '../../src/componentes/Contenedores/pantallaDeConexion';
+import GamePad from '../../src/componentes/Contenedores/gamePad';
 
 export default function App() {
-  const {
-    estadoDeConexion,
-    moverIzquierda,
-    detenerIzquierda,
-    moverDerecha,
-    detenerDerecha,
-    saltar,
-    dejarDeSaltar,
-  } = useConexionConServidor();
+  const conexion = useConexionConServidor();
 
   return (
-    <Contenedor>
-      <IndicadorDeConexion estado={estadoDeConexion} />
-
-      <ControlesDeMovimiento
-        alPresionarIzquierda={moverIzquierda}
-        alSoltarIzquierda={detenerIzquierda}
-        alPresionarDerecha={moverDerecha}
-        alSoltarDerecha={detenerDerecha}
-      />
-
-      <BotonDeSalto
-        alPresionar={saltar}
-        alSoltar={dejarDeSaltar}
-      />
-    </Contenedor>
+    <View style={styles.container}>
+      {!conexion.estado.conectado ? (
+        <PantallaDeConexion
+          conectar={conexion.conectar}
+          error={conexion.error}
+          conectando={conexion.conectando}
+        />
+      ) : (
+        <GamePad
+          estado={conexion.estado}
+          desconectar={conexion.desconectar}
+          enviarComando={conexion.enviarComando}
+        />
+      )}
+    </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: { flex: 1 },
+});
