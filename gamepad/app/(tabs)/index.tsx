@@ -1,4 +1,3 @@
-import React from 'react';
 import { View, StyleSheet } from 'react-native';
 import { useConexionConServidor } from '../../src/hooks/useConexionConServidor';
 import PantallaDeConexion from '../../src/componentes/Contenedores/pantallaDeConexion';

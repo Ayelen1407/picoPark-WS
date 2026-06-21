@@ -20,6 +20,7 @@ const BotonDeSalto: React.FC<Props> = ({ enviarComando }) => {
       onPressIn={() => handleSalto(true)}
       onPressOut={() => handleSalto(false)}
       activeOpacity={0.8}
+      
     >
       <Text style={styles.buttonText}>A</Text>
     </TouchableOpacity>

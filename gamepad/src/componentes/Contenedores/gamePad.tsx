@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import * as ScreenOrientation from 'expo-screen-orientation';
 import { EstadoConexion } from '../../tipos/gamepad';
 import ControlesDeMovimiento from '../Contenidos/controladoresDeMovimiento';
 import BotonDeSalto from '../Contenidos/botonDeSalto';
@@ -12,12 +13,20 @@ interface Props {
 }
 
 const GamePad: React.FC<Props> = ({ estado, desconectar, enviarComando }) => {
+  useEffect(() => {
+    ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.LANDSCAPE);
+
+    return () => {
+      ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT);
+    };
+  }, []);
+
   return (
     <View style={styles.container}>
-      <View style={styles.header}>
-        <View style={styles.headerLeft}>
-          <IndicadorDeConexion conectado={estado.conectado} />
-        </View>
+
+      <View style={styles.sidebar}>
+        <IndicadorDeConexion conectado={estado.conectado} />
+        <Text style={styles.footerText}>{estado.ip}</Text>
         <TouchableOpacity style={styles.disconnectButton} onPress={desconectar}>
           <Text style={styles.disconnectText}>X</Text>
         </TouchableOpacity>
@@ -27,10 +36,6 @@ const GamePad: React.FC<Props> = ({ estado, desconectar, enviarComando }) => {
         <ControlesDeMovimiento enviarComando={enviarComando} />
         <BotonDeSalto enviarComando={enviarComando} />
       </View>
-
-      <View style={styles.footer}>
-        <Text style={styles.footerText}>Conectado a: {estado.ip}</Text>
-      </View>
     </View>
   );
 };
@@ -38,50 +43,42 @@ const GamePad: React.FC<Props> = ({ estado, desconectar, enviarComando }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    flexDirection: 'row',
     backgroundColor: '#1a1a2e',
   },
-  header: {
-    flexDirection: 'row',
+  sidebar: {
+    width: 85,
+    backgroundColor: 'rgba(0,0,0,0.3)',
     justifyContent: 'space-between',
     alignItems: 'center',
-    padding: 20,
-    backgroundColor: 'rgba(0,0,0,0.3)',
-    backdropFilter: 'blur(20px)',
+    paddingVertical: 20,
+    paddingHorizontal: 10,
   },
-  headerLeft: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 15,
-  },
-
   disconnectButton: {
-    width: 50,
-    height: 50,
-    borderRadius: 25,
+    width: 44,
+    height: 42,
+    borderRadius: 22,
     backgroundColor: '#334ec5',
     justifyContent: 'center',
     alignItems: 'center',
     elevation: 8,
   },
   disconnectText: {
-    fontSize: 20,
+    fontSize: 18,
     color: 'white',
   },
   gameArea: {
     flex: 1,
     flexDirection: 'row',
-    justifyContent: 'center',
+    justifyContent: 'space-between',
     alignItems: 'center',
-    padding: 40,
-  },
-  footer: {
-    padding: 20,
-    alignItems: 'center',
+    paddingHorizontal: 40,
   },
   footerText: {
     color: 'rgba(192, 192, 192, 0.7)',
-    fontSize: 14,
+    fontSize: 11,
     fontFamily: 'monospace',
+    textAlign: 'center',
   },
 });
 
