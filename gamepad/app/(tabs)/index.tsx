@@ -17,7 +17,6 @@ export default function App() {
       ) : (
         <GamePad
           estado={conexion.estado}
-          desconectar={conexion.desconectar}
           enviarComando={conexion.enviarComando}
         />
       )}

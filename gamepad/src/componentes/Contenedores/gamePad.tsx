@@ -8,11 +8,10 @@ import IndicadorDeConexion from '../Contenidos/indicadorDeConexion';
 
 interface Props {
   estado: EstadoConexion;
-  desconectar: () => void;
   enviarComando: (comando: any) => void;
 }
 
-const GamePad: React.FC<Props> = ({ estado, desconectar, enviarComando }) => {
+const GamePad: React.FC<Props> = ({ estado, enviarComando }) => {
   useEffect(() => {
     ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.LANDSCAPE);
 
@@ -27,9 +26,6 @@ const GamePad: React.FC<Props> = ({ estado, desconectar, enviarComando }) => {
       <View style={styles.sidebar}>
         <IndicadorDeConexion conectado={estado.conectado} />
         <Text style={styles.footerText}>{estado.ip}</Text>
-        <TouchableOpacity style={styles.disconnectButton} onPress={desconectar}>
-          <Text style={styles.disconnectText}>X</Text>
-        </TouchableOpacity>
       </View>
 
       <View style={styles.gameArea}>
