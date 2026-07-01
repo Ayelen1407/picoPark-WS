@@ -51,8 +51,13 @@
     "extra": {
       "router": {},
       "eas": {
-        "projectId": "ccdd0950-6bf8-483e-85bf-05d4863eaea0"
+        "projectId": "3d95ac1f-06de-4544-8d22-4b290e0c05d2"
       }
-    }
+    },
+    "owner": "arianavilla"
+
+
+
+
   }
 }
